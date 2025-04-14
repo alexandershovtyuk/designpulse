@@ -7,6 +7,7 @@ import { CycleTimeWidget } from '@/core/ui/CycleTimeWidget';
 import { mockSprints } from '@/mock/data';
 import { getRollingAverageVelocity } from '@/core/logic/velocity';
 import { calculatePredictability } from '@/core/logic/predictability';
+import { getNextSprintRecommendation } from '@/core/logic/recommendation';
 
 const lastSprint = mockSprints.at(-1);
 const previousSprints = mockSprints.slice(-4, -1);
@@ -16,7 +17,7 @@ const predictability = calculatePredictability(
   lastSprint.completedTasks
 );
 
-const suggestion = getRollingAverageVelocity(previousSprints);
+const suggestion = getNextSprintRecommendation(previousSprints);
 
 export default function Dashboard() {
   return (
