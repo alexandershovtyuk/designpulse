@@ -5,21 +5,17 @@ import { NextSprintRecommendation } from '@/core/ui/NextSprintRecommendation';
 import { VelocityChart } from '@/core/ui/VelocityChart';
 import { CycleTimeWidget } from '@/core/ui/CycleTimeWidget';
 import { mockSprints } from '@/mock/data';
-import { calculateVelocity, getRollingAverageVelocity } from '@/core/logic/velocity';
+import { getRollingAverageVelocity } from '@/core/logic/velocity';
+import { calculatePredictability } from '@/core/logic/predictability';
 
 const lastSprint = mockSprints.at(-1);
 const previousSprints = mockSprints.slice(-4, -1);
 
-const getCommittedSP = (sprint) => calculateVelocity(sprint.committedTasks);
-const getCompletedSP = (sprint) => calculateVelocity(sprint.completedTasks);
+const predictability = calculatePredictability(
+  lastSprint.committedTasks,
+  lastSprint.completedTasks
+);
 
-const calculatePredictability = (sprint) => {
-  const committed = getCommittedSP(sprint);
-  const completed = getCompletedSP(sprint);
-  return committed ? Math.round((completed / committed) * 100) : 0;
-};
-
-const predictability = calculatePredictability(lastSprint);
 const suggestion = getRollingAverageVelocity(previousSprints);
 
 export default function Dashboard() {
