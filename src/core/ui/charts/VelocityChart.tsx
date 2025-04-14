@@ -1,78 +1,59 @@
 import { Card, CardContent } from '@/core/ui/primitives/card';
 import React from 'react';
-import { useDashboard } from '@/core/context/DashboardContext';
 import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   ResponsiveContainer,
-  Line,
-  LabelList,
+  ReferenceLine,
+  Legend
 } from 'recharts';
-import { calculateVelocity, getRollingAverageVelocity } from '@/core/logic/velocity';
+import { Sprint } from '@/core/types';
 
-export const VelocityChart = () => {
-  const { sprints, currentSprintId } = useDashboard();
+interface VelocityChartProps {
+  sprints: Sprint[];
+  rollingVelocity: number;
+  rollingPredictability: number;
+}
 
-  const now = new Date();
-  const cutoff = new Date();
-  cutoff.setMonth(cutoff.getMonth() - 3);
-
-  const recentSprints = sprints
-    .filter((s) => {
-      if (!s.startDate) return false;
-      const start = new Date(s.startDate);
-      return start >= cutoff;
+export const VelocityChart = ({
+  sprints,
+  rollingVelocity,
+  rollingPredictability
+}: VelocityChartProps) => {
+  const maxY = Math.max(
+    ...sprints.map((s) => {
+      const committed = s.committedTasks.reduce((sum, t) => sum + (t.storyPoints || 0), 0);
+      const completed = s.completedTasks.reduce((sum, t) => sum + (t.storyPoints || 0), 0);
+      return Math.max(committed, completed);
     })
-    .sort((a, b) => a.startDate.localeCompare(b.startDate));
+  );
 
-  const data = recentSprints.map((s, i, arr) => {
-    const committed = calculateVelocity(s.committedTasks);
-    const completed = calculateVelocity(s.completedTasks);
-    const rollingAvgVelocity = getRollingAverageVelocity(arr.slice(Math.max(0, i - 2), i + 1));
+  const predictabilityY = Math.round((rollingPredictability / 100) * maxY);
 
-    const predictability = committed > 0 ? Math.round((completed / committed) * 1000) / 10 : null;
-
-    const name = s.name;
-
-    const period =
-      new Date(s.startDate).toLocaleDateString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit',
-      }) +
-      ' • ' +
-      (s.endDate
-        ? new Date(s.endDate).toLocaleDateString('ru-RU', {
-            day: '2-digit',
-            month: '2-digit',
-            year: '2-digit',
-          })
-        : 'TBD');
-
+  const data = sprints.map((sprint) => {
+    const committed = sprint.committedTasks.reduce((sum, t) => sum + (t.storyPoints || 0), 0);
+    const completed = sprint.completedTasks.reduce((sum, t) => sum + (t.storyPoints || 0), 0);
+    const predictabilityPercent = committed > 0 ? Math.round((completed / committed) * 100) : 0;
     return {
-      id: s.id,
-      name,
-      period,
+      name: sprint.name,
       committed,
       completed,
-      rollingAvgVelocity,
-      predictability,
-      isCurrent: s.id === currentSprintId,
+      velocity: completed,
+      predictabilityPercent
     };
   });
 
   return (
     <Card className="w-full">
       <CardContent className="p-4">
-        <h3 className="font-semibold text-sm mb-2">Velocity per Sprint (Last 3 Months)</h3>
-        <ResponsiveContainer width="100%" height={250}>
+        <h3 className="font-semibold text-sm mb-2">Velocity per Sprint</h3>
+        <ResponsiveContainer width="100%" height={280}>
           <BarChart data={data} barGap={8}>
-            <XAxis dataKey="name" fontSize={12} />
-            <YAxis fontSize={12} allowDecimals={false} />
+            <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+            <YAxis fontSize={12} allowDecimals={false} tickLine={false} axisLine={false} />
             <Tooltip
               content={({ active, payload }) => {
                 if (!active || !payload || !payload[0]) return null;
@@ -80,43 +61,65 @@ export const VelocityChart = () => {
                 return (
                   <div className="bg-white p-3 shadow-md rounded text-sm w-56">
                     <div className="font-medium text-black mb-1">{p.name}</div>
-                    <div className="text-gray-500 mb-1">{p.period}</div>
                     <div className="text-gray-700">Committed: {p.committed} SP</div>
                     <div className="text-gray-700">Completed: {p.completed} SP</div>
-                    <div className="text-gray-700">Velocity avg (3): {p.rollingAvgVelocity}</div>
-                    {p.predictability !== null && (
-                      <div className="text-gray-700">Predictability avg (3): {p.predictability}%</div>
-                    )}
+                    <div className="text-gray-700">Velocity: {p.velocity} SP</div>
+                    <div className="text-gray-700">Predictability: {p.predictabilityPercent}%</div>
                   </div>
                 );
               }}
             />
-            <Legend wrapperStyle={{ fontSize: 12 }} />
+            <Legend
+              verticalAlign="bottom"
+              height={36}
+              payload={[
+                {
+                  value: 'Committed SP',
+                  type: 'square',
+                  color: '#cbd5e1',
+                },
+                {
+                  value: 'Completed SP',
+                  type: 'square',
+                  color: '#3b82f6',
+                },
+                {
+                  value: 'Velocity avg (3)',
+                  type: 'line',
+                  color: '#60a5fa',
+                },
+                {
+                  value: 'Predictability avg (3)',
+                  type: 'line',
+                  color: '#a78bfa',
+                }
+              ]}
+            />
             <Bar
               dataKey="committed"
               fill="#cbd5e1"
               name="Committed SP"
               radius={[4, 4, 0, 0]}
-              className="transition-all"
-            >
-              <LabelList dataKey="committed" position="top" fontSize={10} fill="#64748b" />
-            </Bar>
+            />
             <Bar
               dataKey="completed"
               fill="#3b82f6"
               name="Completed SP"
               radius={[4, 4, 0, 0]}
-              className="transition-all"
-            >
-              <LabelList dataKey="completed" position="top" fontSize={10} fill="#1e40af" />
-            </Bar>
-            <Line
-              type="monotone"
-              dataKey="rollingAvgVelocity"
-              stroke="#94a3b8"
+            />
+            <ReferenceLine
+              y={rollingVelocity}
+              stroke="#60a5fa"
               strokeDasharray="4 4"
-              dot={false}
-              name="Velocity avg (3)"
+              strokeWidth={1}
+              ifOverflow="extendDomain"
+            />
+            <ReferenceLine
+              y={predictabilityY}
+              stroke="#a78bfa"
+              strokeDasharray="4 4"
+              strokeWidth={1}
+              ifOverflow="extendDomain"
             />
           </BarChart>
         </ResponsiveContainer>
