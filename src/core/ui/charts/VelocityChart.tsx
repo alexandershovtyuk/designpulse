@@ -50,10 +50,10 @@ export const VelocityChart = ({
     <Card className="w-full">
       <CardContent className="p-4">
         <h3 className="font-semibold text-sm mb-2">Velocity per Sprint</h3>
-        <ResponsiveContainer width="100%" height={280}>
-          <BarChart data={data} barGap={8}>
-            <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis fontSize={12} allowDecimals={false} tickLine={false} axisLine={false} />
+        <ResponsiveContainer width="100%" height={320}>
+          <BarChart data={data} barGap={4}>
+            <XAxis dataKey="name" fontSize={10} tickLine={false} axisLine={false} />
+            <YAxis fontSize={10} allowDecimals={false} tickLine={false} axisLine={false} />
             <Tooltip
               content={({ active, payload }) => {
                 if (!active || !payload || !payload[0]) return null;
@@ -71,7 +71,7 @@ export const VelocityChart = ({
             />
             <Legend
               verticalAlign="bottom"
-              height={36}
+              height={32}
               payload={[
                 {
                   value: 'Committed SP',
