@@ -5,9 +5,9 @@ import { NextSprintRecommendation } from '@/core/ui/NextSprintRecommendation';
 import { VelocityChart } from '@/core/ui/VelocityChart';
 import { CycleTimeWidget } from '@/core/ui/CycleTimeWidget';
 import { mockSprints } from '@/mock/data';
-import { getRollingAverageVelocity } from '@/core/logic/velocity';
 import { calculatePredictability } from '@/core/logic/predictability';
 import { getNextSprintRecommendation } from '@/core/logic/recommendation';
+import { averageCycleTime } from '@/core/logic/cycle-time';
 
 const lastSprint = mockSprints.at(-1);
 const previousSprints = mockSprints.slice(-4, -1);
@@ -18,6 +18,7 @@ const predictability = calculatePredictability(
 );
 
 const suggestion = getNextSprintRecommendation(previousSprints);
+const cycleTime = averageCycleTime(lastSprint.completedTasks);
 
 export default function Dashboard() {
   return (
@@ -32,7 +33,7 @@ export default function Dashboard() {
         <div className="space-y-4">
           <SprintPredictability percentage={predictability} />
           <NextSprintRecommendation value={suggestion} />
-          <CycleTimeWidget value={3.8} />
+          <CycleTimeWidget value={cycleTime} />
         </div>
       </LayoutSection>
     </>
