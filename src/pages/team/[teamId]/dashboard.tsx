@@ -1,9 +1,9 @@
-import { TeamNav } from '@/core/ui/TeamNav';
+import { TeamNav } from '@/core/ui/layout/TeamNav';
 import { LayoutSection } from '@/core/layout/LayoutSection';
-import { SprintPredictability } from '@/core/ui/SprintPredictability';
-import { NextSprintRecommendation } from '@/core/ui/NextSprintRecommendation';
-import { VelocityChart } from '@/core/ui/VelocityChart';
-import { CycleTimeWidget } from '@/core/ui/CycleTimeWidget';
+import { SprintPredictabilityWidget } from '@/core/ui/widgets/SprintPredictabilityWidget';
+import { NextSprintRecommendationWidget } from '@/core/ui/widgets/NextSprintRecommendationWidget';
+import { VelocityChart } from '@/core/ui/charts/VelocityChart';
+import { CycleTimeWidget } from '@/core/ui/widgets/CycleTimeWidget';
 import { mockSprints } from '@/mock/data';
 import { calculatePredictability } from '@/core/logic/predictability';
 import { getNextSprintRecommendation } from '@/core/logic/recommendation';
@@ -31,8 +31,8 @@ export default function Dashboard() {
         </div>
 
         <div className="space-y-4">
-          <SprintPredictability percentage={predictability} />
-          <NextSprintRecommendation value={suggestion} />
+          <SprintPredictabilityWidget percentage={predictability} />
+          <NextSprintRecommendationWidget value={suggestion} />
           <CycleTimeWidget value={cycleTime} />
         </div>
       </LayoutSection>

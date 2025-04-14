@@ -1,19 +1,20 @@
-import { Card, CardContent } from '@/core/ui/card';
+import { Card, CardContent } from '@/core/ui/primitives/card';
 import { ArrowRightCircle } from '@/lib/icons';
 
-export function SprintPredictability({ percentage }: { percentage: number }) {
+
+export function NextSprintRecommendationWidget({ value }: { value: number }) {
   return (
-    <Card className="w-full">
+    <Card>
       <CardContent className="flex flex-col items-start p-4 space-y-2">
         <div className="flex items-center space-x-2 text-muted-foreground text-sm uppercase tracking-wide">
           <ArrowRightCircle className="w-4 h-4" />
-          <span>Predictability</span>
+          <span>Next Sprint Plan</span>
         </div>
-        <div className="text-4xl font-bold leading-tight">
-          {percentage}%
+        <div className="text-3xl font-bold leading-tight">
+          ▶ {value} SP
         </div>
         <p className="text-sm text-muted-foreground">
-          Avg. planned vs. complete match
+          Recommended scope based on avg. velocity
         </p>
       </CardContent>
     </Card>

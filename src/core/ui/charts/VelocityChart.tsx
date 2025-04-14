@@ -1,4 +1,4 @@
-import { Card, CardContent } from '@/core/ui/card';
+import { Card, CardContent } from '@/core/ui/primitives/card';
 import React from 'react';
 import { useDashboard } from '@/core/context/DashboardContext';
 import {

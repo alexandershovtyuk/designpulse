@@ -3,7 +3,7 @@ import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from "@/core/ui/navigation-menu";
+} from "@/core/ui/primitives/navigation-menu";
 
 const teams = [
   "All Teams",
