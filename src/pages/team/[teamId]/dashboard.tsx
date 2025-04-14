@@ -3,6 +3,7 @@ import { LayoutSection } from "@/core/layout/LayoutSection";
 import { SprintPredictability } from '@/core/ui/SprintPredictability';
 import { NextSprintRecommendation } from '@/core/ui/NextSprintRecommendation';
 import { VelocityChart } from '@/core/ui/VelocityChart';
+import { CycleTimeWidget } from '@/core/ui/CycleTimeWidget';
 import { mockSprints } from '@/mock/data';
 
 const lastSprint = mockSprints[mockSprints.length - 1];
@@ -37,11 +38,14 @@ export default function Dashboard() {
         <div className="space-y-4">
           <VelocityChart />
         </div>
-
         <div className="space-y-4">
           <SprintPredictability percentage={predictability} />
           <NextSprintRecommendation value={suggestion} />
         </div>
+      </LayoutSection>
+
+      <LayoutSection title="SLA / Review">
+        <CycleTimeWidget />
       </LayoutSection>
     </>
   );
