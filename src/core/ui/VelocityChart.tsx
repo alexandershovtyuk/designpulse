@@ -1,7 +1,6 @@
-import React from 'react';
 import { Card, CardContent } from '@/core/ui/card';
+import React from 'react';
 import { useDashboard } from '@/core/context/DashboardContext';
-
 import {
   BarChart,
   Bar,
@@ -13,6 +12,7 @@ import {
   Line,
   LabelList,
 } from 'recharts';
+import { calculateVelocity, getRollingAverageVelocity } from '@/core/logic/velocity';
 
 export const VelocityChart = () => {
   const { sprints, currentSprintId } = useDashboard();
@@ -30,14 +30,9 @@ export const VelocityChart = () => {
     .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
   const data = recentSprints.map((s, i, arr) => {
-    const committed = s.committedTasks.reduce((sum, t) => sum + (t.storyPoints || 0), 0);
-    const completed = s.completedTasks.reduce((sum, t) => sum + (t.storyPoints || 0), 0);
-
-    const window = arr.slice(Math.max(0, i - 2), i + 1);
-    const rollingAvgVelocity =
-      window.reduce((sum, sprint) => {
-        return sum + sprint.completedTasks.reduce((s, t) => s + (t.storyPoints || 0), 0);
-      }, 0) / window.length;
+    const committed = calculateVelocity(s.committedTasks);
+    const completed = calculateVelocity(s.completedTasks);
+    const rollingAvgVelocity = getRollingAverageVelocity(arr.slice(Math.max(0, i - 2), i + 1));
 
     const predictability = committed > 0 ? Math.round((completed / committed) * 1000) / 10 : null;
 
@@ -64,7 +59,7 @@ export const VelocityChart = () => {
       period,
       committed,
       completed,
-      rollingAvgVelocity: Math.round(rollingAvgVelocity * 10) / 10,
+      rollingAvgVelocity,
       predictability,
       isCurrent: s.id === currentSprintId,
     };
