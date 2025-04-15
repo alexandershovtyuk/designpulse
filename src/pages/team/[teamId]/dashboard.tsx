@@ -3,6 +3,7 @@ import { LayoutSection } from '@/core/layout/LayoutSection';
 import { SprintPredictabilityWidget } from '@/core/ui/widgets/SprintPredictabilityWidget';
 import { NextSprintRecommendationWidget } from '@/core/ui/widgets/NextSprintRecommendationWidget';
 import { VelocityChart } from '@/core/ui/charts/VelocityChart';
+import { SPDistributionChart } from '@/core/ui/charts/SPDistributionChart';
 import { CycleTimeWidget } from '@/core/ui/widgets/CycleTimeWidget';
 import { mockSprints } from '@/mock/data';
 import {
@@ -38,6 +39,7 @@ export default function Dashboard() {
             rollingVelocity={rollingVelocity}
             rollingPredictability={rollingPredictability}
           />
+          <SPDistributionChart sprints={mockSprints} />
         </div>
 
         <div className="space-y-4">
