@@ -76,12 +76,12 @@ export const VelocityChart = ({
                 {
                   value: 'Committed SP',
                   type: 'square',
-                  color: '#cbd5e1',
+                  color: '#9ca3af',
                 },
                 {
                   value: 'Completed SP',
                   type: 'square',
-                  color: '#3b82f6',
+                  color: '#6366f1',
                 },
                 {
                   value: 'Velocity avg (3)',
@@ -97,13 +97,13 @@ export const VelocityChart = ({
             />
             <Bar
               dataKey="committed"
-              fill="#cbd5e1"
+              fill="#e5e7eb"
               name="Committed SP"
               radius={[4, 4, 0, 0]}
             />
             <Bar
               dataKey="completed"
-              fill="#3b82f6"
+              fill="#6366f1"
               name="Completed SP"
               radius={[4, 4, 0, 0]}
             />

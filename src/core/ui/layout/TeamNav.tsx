@@ -27,9 +27,9 @@ export const TeamNav = () => {
           <NavigationMenuItem key={team}>
             <button
               onClick={() => setActiveTeam(team)}
-              className={`text-sm px-3 py-1 rounded-md transition-colors ${
+              className={`font-semibold px-5 py-2 rounded-full transition-colors ${
                 activeTeam === team
-                  ? "font-semibold underline text-primary"
+                  ? " text-white bg-indigo-500"
                   : "text-muted-foreground hover:text-primary"
               }`}
             >

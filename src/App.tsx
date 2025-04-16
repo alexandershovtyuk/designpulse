@@ -4,8 +4,10 @@ import { mockSprints } from '@/mock/data';
 
 export default function App() {
   return (
-    <DashboardProvider sprints={mockSprints} currentSprintId={mockSprints.at(-1)?.id}>
-      <Dashboard />
-    </DashboardProvider>
+    <div className="min-h-screen bg-gray-50">
+      <DashboardProvider sprints={mockSprints} currentSprintId={mockSprints.at(-1)?.id}>
+        <Dashboard />
+      </DashboardProvider>
+    </div>
   );
 }

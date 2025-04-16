@@ -30,24 +30,28 @@ const rollingPredictability = getRollingPredictability(mockSprints);
 export default function Dashboard() {
   return (
     <>
-      <TeamNav />
-
-      <LayoutSection title="Velocity & Predictability">
-        <div className="space-y-4">
-          <VelocityChart
-            sprints={mockSprints}
-            rollingVelocity={rollingVelocity}
-            rollingPredictability={rollingPredictability}
-          />
-          <SPDistributionChart sprints={mockSprints} />
-        </div>
-
-        <div className="space-y-4">
-          <SprintPredictabilityWidget percentage={predictability} />
-          <NextSprintRecommendationWidget value={suggestion} />
-          <CycleTimeWidget value={cycleTime} />
-        </div>
-      </LayoutSection>
+      <div class="container mx-auto">
+        
+        <nav class="py-10 flex">
+          <img src="/dplogo.png" class="w-12 h-12 flex-none mr-5" alt="Design Pulse" className="h-6" />
+          <TeamNav />
+        </nav>
+        <LayoutSection title="Velocity & Predictability">
+          <div className="space-y-4">
+            <VelocityChart
+              sprints={mockSprints}
+              rollingVelocity={rollingVelocity}
+              rollingPredictability={rollingPredictability}
+            />
+            {/* <SPDistributionChart sprints={mockSprints} /> */}
+          </div>
+          <div className="space-y-4">
+            <SprintPredictabilityWidget percentage={predictability} />
+            <NextSprintRecommendationWidget value={suggestion} />
+            <CycleTimeWidget value={cycleTime} />
+          </div>
+        </LayoutSection>
+      </div>
     </>
   );
 }
