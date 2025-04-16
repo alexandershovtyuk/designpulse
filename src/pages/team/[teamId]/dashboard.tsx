@@ -33,7 +33,7 @@ export default function Dashboard() {
       <div class="container mx-auto">
         
         <nav class="py-10 flex">
-          <img src="/dplogo.png" class="w-12 h-12 flex-none mr-5" alt="Design Pulse" className="h-6" />
+          <img src="/dplogo.png" class="w-12 h-12 mr-5" alt="Design Pulse" />
           <TeamNav />
         </nav>
         <LayoutSection title="Velocity & Predictability">
